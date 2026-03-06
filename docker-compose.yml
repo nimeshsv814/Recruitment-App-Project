@@ -1,5 +1,6 @@
 version: '3.8'
 
+
 networks:
   recruitment-net:
 
@@ -16,14 +17,19 @@ services:
     ports:
       - "85:3000"
     environment:
-      - MONGO_URI=mongodb://rootuser:rootpassword@mongo:27017/hr_system?authSource=rootuser
-    
-  mongo:
-    image: mongo
-    container_name: mongodb-cont
+      - MONGO_URI=mongodb://rootuser:root123@mongodb:27017/hr_system?authSource=rootuser
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
     networks:
       - recruitment-net
     volumes:
       - recruitment-vol:/data/db
     ports:
       - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=root123
