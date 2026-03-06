@@ -1,1 +1,40 @@
+version: '3.8'
 
+networks:
+  recruitment-net1:
+  recruitment-net2:
+  
+services:
+
+  recruitment-app:
+    image: nimeshsv814/recruitment-app:v1.1.1
+    container_name: recruitment-app
+    networks:
+      - recruitment-net1
+    ports:
+      - "86:3000"
+    environment:
+      - MONGO_URI=mongodb://rootuser:root123@mongodb:27017/hr_system?authSource=admin
+    
+
+  ubuntu:
+    image: ubuntu:latest
+    container: ubuntu
+    networks:
+      - recruitment-net1
+      - recruitment-net2
+    ports:
+      - "81:80"
+    command: sleep infinity
+    
+    
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    networks:
+      - recruitment-net2
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=root123
+    ports:
+      - "27017:27017"
