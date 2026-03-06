@@ -24,6 +24,6 @@ services:
     networks:
       - recruitment-net
     volumes:
-      - recruitment-vol
+      - recruitment-vol:/data/db
     ports:
       - "27017:27017"
