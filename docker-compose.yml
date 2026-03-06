@@ -16,7 +16,7 @@ services:
     ports:
       - "85:3000"
     environment:
-      - MONGO_URI=mongodb://rootuser:rootpassword@mongodb-cont:27017/hr_system?authSource=rootuser
+      - MONGO_URI=mongodb://rootuser:rootpassword@mongo:27017/hr_system?authSource=rootuser
     
   mongo:
     image: mongo
