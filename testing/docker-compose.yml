@@ -14,11 +14,11 @@ services:
     ports:
       - "86:3000"
     environment:
-      - MONGO_URI=mongodb://rootuser:root123@mongodb:27017/hr_system?authSource=admin
+      - MONGO_URI=mongodb://rootuser:root123@ubuntu:27017/hr_system?authSource=admin
     
 
   ubuntu:
-    image: ubuntu:latest
+    image: nginx
     container: ubuntu
     networks:
       - recruitment-net1
@@ -26,6 +26,8 @@ services:
     ports:
       - "81:80"
     command: sleep infinity
+    volumes: 
+      - ./nginx.config:/etc/nginx/nginx.config
     
     
   mongodb:
