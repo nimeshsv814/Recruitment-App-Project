@@ -1,8 +1,8 @@
 version: '3.8'
 
-
 networks:
-  recruitment-net:
+  recruitment-net1:
+  recruitment-net2:
 
 volumes:
   recruitment-vol:
@@ -13,23 +13,21 @@ services:
     image: nimeshsv814/recruitment-app:v1.1.1
     container_name: recruitment-app
     networks:
-      - recruitment-net
+      - recruitment-net1
     ports:
       - "85:3000"
     environment:
-      - MONGO_URI=mongodb://rootuser:root123@mongodb:27017/hr_system?authSource=rootuser
-    depends_on:
-      - mongodb
-
+      - MONGO_URI=mongodb://rootuser:root123@10.0.1.129:27017/hr_system?authSource=rootuser
+    
   mongodb:
-    image: mongo:7
+    image: mongo
     container_name: mongodb
     networks:
-      - recruitment-net
+      - recruitment-net2
     volumes:
       - recruitment-vol:/data/db
-    ports:
-      - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=rootuser
       - MONGO_INITDB_ROOT_PASSWORD=root123
+    ports:
+      - "27017:27017"
