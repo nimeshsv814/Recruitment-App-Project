@@ -58,7 +58,7 @@ spec:
         - containerPort: 3000
         env:
         - name: MONGO_URI
-          value: "mongodb://rootuser:root123@mongodb-service:27017/hr_system?authSource=admin"
+          value: "mongodb://rootuser:root123@10.104.158.172:27017/hr_system?authSource=admin"
 
 ---
 apiVersion: v1
