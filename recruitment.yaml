@@ -1,22 +1,65 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: recruitment-backend
+  name: mongodb
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: recruitment-backend
+      app: mongodb
   template:
     metadata:
       labels:
-        app: recruitment-backend
+        app: mongodb
     spec:
       containers:
-      - name: recruitment-backend
-        image: nimeshsv/recruitment-app:v1.1.1
+      - name: mongodb
+        image: mongo
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: "rootuser"
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: "root123"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+  - port: 27017
+    targetPort: 27017
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recruitment-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recruitment-app
+  template:
+    metadata:
+      labels:
+        app: recruitment-app
+    spec:
+      containers:
+      - name: recruitment-app
+        image: nimeshsv814/recruitment-app:v1.1.1
         ports:
         - containerPort: 3000
+        env:
+        - name: MONGO_URI
+          value: "mongodb://rootuser:root123@mongodb-service:27017/hr_system?authSource=admin"
+
 ---
 apiVersion: v1
 kind: Service
@@ -24,9 +67,9 @@ metadata:
   name: recruitment-service
 spec:
   selector:
-    app: recruitment-backend
+    app: recruitment-app
   ports:
-    - port: 80
-      targetPort: 3000
-      nodePort: 30007
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30085
   type: NodePort
