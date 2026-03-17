@@ -4,6 +4,9 @@ metadata:
   name: recruitment-config
 data:
   MONGO_URI: "mongodb://rootuser:root123@mongodb-service:27017/hr_system?authSource=admin"
+  MONGO_INITDB_ROOT_USERNAME: "rootuser"
+  MONGO_INITDB_ROOT_PASSWORD: "root123"
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -24,12 +27,10 @@ spec:
         image: mongo
         ports:
         - containerPort: 27017
-        env:
-        - name: MONGO_URI
-          valueFrom:
-            configMapKeyRef:
+        envFrom:
+          - configMapRef:
               name: recruitment-config
-              key: MONGO_URI
+
 
 ---
 apiVersion: v1
@@ -64,9 +65,9 @@ spec:
         image: nimeshsv814/recruitment-app:v1.1.1
         ports:
         - containerPort: 3000
-        env:
-        - name: MONGO_URI
-          value: "mongodb://rootuser:root123@mongodb-service:27017/hr_system?authSource=admin"
+        envFrom:
+          - configMapRef:
+              name: recruitment-config
 
 ---
 apiVersion: v1
